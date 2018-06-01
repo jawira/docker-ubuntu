@@ -2,6 +2,9 @@ FROM ubuntu:18.04
 
 MAINTAINER Jawira Portugal
 
+
+#Installing Docker
+#-----------------
 RUN apt-get update && \
     apt-get install -y \
         apt-transport-https \
@@ -18,15 +21,20 @@ RUN apt-get update && \
     apt-get install -y docker-ce && \
     docker -v
 
+
+#Installing required software
+#----------------------------
 RUN apt-get install -y \
     make \
     wget
 
+
+#Installing PHP
+#--------------
 #https://serverfault.com/questions/683605/docker-container-time-timezone-will-not-reflect-changes
 ENV TZ=Europe/Brussels
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-#Installing PHP
 RUN apt-get install -y \
     php7.2 \
     php7.2-cli
@@ -50,4 +58,6 @@ RUN apt-get install -y \
 #    php7.2-xsl \
 #    php7.2-zip
 
-RUN rm -rf /var/lib/apt/lists/*
+#Cleaning
+#--------
+RUN apt-get autoremove -y && apt-get autoclean && apt-get clean && rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists/*
